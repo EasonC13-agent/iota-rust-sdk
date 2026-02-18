@@ -153,7 +153,15 @@ mod serialization {
     }
 }
 
-#[derive(Eq, PartialEq, Clone, Debug)]
+/// Description of a shared object that was used as input to a transaction
+///
+/// Captures how each shared object was accessed during execution: whether it
+/// was mutated, read-only, deleted after mutable or read-only access, or
+/// cancelled.
+///
+/// This type is not directly BCS-serialized; it is derived from the transaction
+/// effects data.
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub enum InputSharedObject {
     Mutate(ObjectReference),
     ReadOnly(ObjectReference),
@@ -197,7 +205,7 @@ impl InputSharedObject {
 /// id-operation-created    = %x01
 /// id-operation-deleted    = %x02
 /// ```
-#[derive(Eq, PartialEq, Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(
     feature = "serde",
     derive(serde::Serialize, serde::Deserialize),
@@ -216,7 +224,12 @@ impl IdOperation {
     crate::def_is!(None, Created, Deleted);
 }
 
-#[derive(Clone)]
+/// Effect on an individual object, keyed by its [`ObjectId`]
+///
+/// Describes the input and output state of a single object that was read or
+/// modified during transaction execution, along with the [`IdOperation`] that
+/// was applied to it.
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct ObjectChange {
     pub id: ObjectId,
     pub input_version: Option<Version>,
@@ -226,8 +239,16 @@ pub struct ObjectChange {
     pub id_operation: IdOperation,
 }
 
+// We don't want users of the SDK to implement the API traits, so we seal it.
+mod private {
+    pub trait Sealed {}
+    impl Sealed for super::TransactionEffectsV1 {}
+    impl<T: Sealed> Sealed for Box<T> {}
+    impl Sealed for super::TransactionEffects {}
+}
+
 #[enum_dispatch]
-pub trait TransactionEffectsAPI {
+pub trait TransactionEffectsAPI: private::Sealed {
     /// Return the status of the transaction.
     fn status(&self) -> &ExecutionStatus;
     fn into_status(self) -> ExecutionStatus;
