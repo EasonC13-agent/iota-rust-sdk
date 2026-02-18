@@ -6,7 +6,7 @@ use iota_sdk::{
     crypto::{IotaSigner, ed25519::Ed25519PrivateKey},
     graphql_client::{Client, faucet::FaucetClient},
     transaction_builder::TransactionBuilder,
-    types::Address,
+    types::{Address, TransactionEffectsAPI},
 };
 
 #[tokio::main]

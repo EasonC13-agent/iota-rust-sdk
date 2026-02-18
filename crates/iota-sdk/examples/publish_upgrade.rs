@@ -28,7 +28,10 @@ use iota_sdk::{
     crypto::{IotaSigner, ed25519::Ed25519PrivateKey},
     graphql_client::{Client, WaitForTx, faucet::FaucetClient},
     transaction_builder::{TransactionBuilder, assigned},
-    types::{Address, MovePackageData, ObjectId, ObjectOut, StructTag, UpgradePolicy},
+    types::{
+        Address, MovePackageData, ObjectId, ObjectOut, StructTag, TransactionEffectsAPI,
+        UpgradePolicy,
+    },
 };
 use rand::rngs::OsRng;
 

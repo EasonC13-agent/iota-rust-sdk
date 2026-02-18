@@ -307,7 +307,7 @@ mod tests {
     };
     use iota_types::{
         Address, Digest, ExecutionStatus, IdOperation, MovePackageData, ObjectId, ObjectReference,
-        ObjectType, TransactionEffects, UpgradePolicy, Version,
+        ObjectType, TransactionEffects, TransactionEffectsAPI, UpgradePolicy, Version,
     };
 
     use crate::{TransactionBuilder, assigned, error::Error};

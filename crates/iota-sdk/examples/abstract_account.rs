@@ -10,7 +10,7 @@ use iota_sdk::{
     transaction_builder::{
         MoveAuthenticatorBuilder, Shared, SharedMut, TransactionBuilder, assigned,
     },
-    types::{Address, Identifier, MovePackageData, ObjectId, ObjectOut},
+    types::{Address, Identifier, MovePackageData, ObjectId, ObjectOut, TransactionEffectsAPI},
 };
 use rand::rngs::OsRng;
 

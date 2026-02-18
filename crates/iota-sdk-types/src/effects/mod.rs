@@ -55,7 +55,7 @@ impl TransactionEffects {
 
 impl Default for TransactionEffects {
     fn default() -> Self {
-        TransactionEffects::V1(Box::new(Default::default()))
+        TransactionEffects::V1(Box::default())
     }
 }
 

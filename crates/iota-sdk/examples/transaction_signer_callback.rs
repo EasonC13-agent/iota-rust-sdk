@@ -6,7 +6,7 @@ use iota_sdk::{
     crypto::{IotaSigner, SignatureError, ed25519::Ed25519PrivateKey},
     graphql_client::{Client, WaitForTx, faucet::FaucetClient},
     transaction_builder::{TransactionBuilder, TransactionSigner},
-    types::{Address, Transaction, UserSignature},
+    types::{Address, Transaction, TransactionEffectsAPI, UserSignature},
 };
 
 struct AsyncSigner(Ed25519PrivateKey);
