@@ -158,9 +158,6 @@ mod serialization {
 /// Captures how each shared object was accessed during execution: whether it
 /// was mutated, read-only, deleted after mutable or read-only access, or
 /// cancelled.
-///
-/// This type is not directly BCS-serialized; it is derived from the transaction
-/// effects data.
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub enum InputSharedObject {
     Mutate(ObjectReference),
@@ -239,14 +236,6 @@ pub struct ObjectChange {
     pub id_operation: IdOperation,
 }
 
-// We don't want users of the SDK to implement the API traits, so we seal it.
-mod private {
-    pub trait Sealed {}
-    impl Sealed for super::TransactionEffectsV1 {}
-    impl<T: Sealed> Sealed for Box<T> {}
-    impl Sealed for super::TransactionEffects {}
-}
-
 #[enum_dispatch]
 pub trait TransactionEffectsAPI: private::Sealed {
     /// Return the status of the transaction.
@@ -301,4 +290,12 @@ pub trait TransactionEffectsAPIForTesting: TransactionEffectsAPI {
     fn unsafe_add_deleted_live_object_for_testing(&mut self, object_ref: ObjectReference);
     // Adding a tombstone for a deleted object.
     fn unsafe_add_object_tombstone_for_testing(&mut self, object_ref: ObjectReference);
+}
+
+// We don't want users of the SDK to implement the API traits, so we seal them.
+mod private {
+    pub trait Sealed {}
+    impl Sealed for super::TransactionEffectsV1 {}
+    impl<T: Sealed> Sealed for Box<T> {}
+    impl Sealed for super::TransactionEffects {}
 }
